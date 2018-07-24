@@ -1,2 +1,2 @@
 #!/bin/bash
-./z_tools/nask helloos.nas helloos.img
+./z_tools/nask ipl.nas ipl.bin ipl.lst
