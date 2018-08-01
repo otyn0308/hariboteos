@@ -61,6 +61,14 @@ next:
 	ADD		CL,1			;CLに1を足す
 	CMP		CL,18			;CLと18を比較
 	JBE		readloop		;CL <= だったらreadloopへ
+	MOV		CL,1
+	ADD		DH,1
+	CMP		DH,2
+	JB		readloop		;DH < 2 だったらreadloopへ
+	MOV		DH,0
+	ADD		CH,1
+	CMP		CH,CYLS
+	JB		readloop		;CH < CYLS だったらreadloopへ
 fin:
 	HLT						;何かあるまでCPUを停止させる
 	JMP		fin				;無限ループ
