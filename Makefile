@@ -10,12 +10,16 @@ default :
 ipl.bin : ipl.nas Makefile
 	$(NASK) ipl.nas ipl.bin ipl.lst
 
-helloos.img : ipl.bin Makefile
+haribote.sys : haribote.nas Makefile
+	$(NASK) haribote.nas haribote.sys haribote.lst
+
+haribote.img : ipl.bin haribote.sys Makefile
 	$(EDIMG) imgin:$(Z_TOOLS)fdimg0at.tek \
-		wbinimg src:ipl.bin len:512 from:0 to:0 imgout:helloos.img
+		wbinimg src:ipl.bin len:512 from:0 to:0 \
+		copy from:haribote.sys to:@: \
+		imgout:haribote.img
 
 # コマンド
-
 asm :
 	make -r ipl.bin
 
@@ -29,6 +33,8 @@ run :
 clean :
 	rm ipl.bin
 	rm ipl.lst
+	rm haribote.sys
+	rm haribote.lst
 
 src_only :
 	make clean
