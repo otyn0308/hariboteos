@@ -24,11 +24,11 @@ asm :
 	make -r ipl.bin
 
 img :
-	make -r helloos.img
+	make -r haribote.img
 
 run :
 	make img
-	qemu-system-i386 -fda helloos.img
+	qemu-system-i386 -fda haribote.img
 
 clean :
 	rm ipl.bin
