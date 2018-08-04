@@ -1,6 +1,14 @@
-Z_TOOLS = ./z_tools/
-NASK = $(Z_TOOLS)nask
-EDIMG = $(Z_TOOLS)edimg
+Z_TOOLS	= ./z_tools/
+INPACH 	= ./ztools/haribote/
+
+NASK 	= $(Z_TOOLS)nask
+EDIMG 	= $(Z_TOOLS)edimg
+CC1 	= $(Z_TOOLS)gocc1 -I$(INCPATH) -Os -Wall -quiet
+GAS2NASK= $(Z_TOOLS)gas2nask -a
+OBJ2BIM = $(Z_TOOLS)obj2bim
+BIM2HRB	= $(Z_TOOLS)bim2hrb
+HARITOL	= $(Z_TOOLS)haritol
+RULEFILE= haribote.rul
 
 # デフォルト動作
 
@@ -9,6 +17,25 @@ default :
 
 ipl.bin : ipl.nas Makefile
 	$(NASK) ipl.nas ipl.bin ipl.lst
+
+asmhead.bin : asmhead.nas Makefile
+	$(NASK) asmhead.nas asmhead.bin asmhead.lst
+
+bootpack.gas : bootpack.c Makefile
+	$(CC1) -o bootpack.gas bootpack.c
+
+bootpack.nas : bootpack.gas Makefile
+	$(GAS2NASK) bootpack.gas bootpack.nas
+
+bootpack.obj : bootpack.nas Makefile
+	$(NASK) bootpack.nas bootpack.obj bootpack.lst
+
+bootpack.bim : bootpack.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \
+		bootpack.obj
+
+bootpack.hrb : bootpack.bim Makefile
+	$(BIM2HRB) bootpack.bim bootpack.hrb 0
 
 haribote.sys : haribote.nas Makefile
 	$(NASK) haribote.nas haribote.sys haribote.lst
@@ -33,8 +60,16 @@ run :
 clean :
 	rm ipl.bin
 	rm ipl.lst
+	rm asmhead.bin
+	rm asmhead.lst
+	rm bootpack.hrb
+	rm bootpack.lst
+	rm bootpack.map
+	rm bootpack.bim
+	rm bootpack.obj
+	rm bootpack.nas
+	rm bootpack.gas
 	rm haribote.sys
-	rm haribote.lst
 
 src_only :
 	make clean
