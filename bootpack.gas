@@ -6,7 +6,19 @@
 _HariMain:
 	pushl	%ebp
 	movl	%esp, %ebp
-L2:
+	pushl	%ebx
+	movl	$655360, %ebx
+L6:
+	pushl	$15
+	pushl	%ebx
+	incl	%ebx
+	call	_write_mem8
+	cmpl	$720895, %ebx
+	popl	%eax
+	popl	%edx
+	jle	L6
+L7:
 	call	_io_hlt
-	jmp	L2
+	jmp	L7
 	.def	_io_hlt;	.scl	2;	.type	32;	.endef
+	.def	_write_mem8;	.scl	2;	.type	32;	.endef

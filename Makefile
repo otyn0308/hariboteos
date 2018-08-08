@@ -9,7 +9,6 @@ OBJ2BIM = $(Z_TOOLS)obj2bim
 BIM2HRB	= $(Z_TOOLS)bim2hrb
 HARITOL	= $(Z_TOOLS)haritol
 RULEFILE= haribote.rul
-
 # デフォルト動作
 
 default :
@@ -35,14 +34,14 @@ naskfunc.obj : naskfunc.nas Makefile
 
 bootpack.bim : bootpack.obj Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \
-		bootpack.obj \
-		naskfunc.obj
+	  bootpack.obj \
+	  naskfunc.obj
 
 bootpack.hrb : bootpack.bim Makefile
 	$(BIM2HRB) bootpack.bim bootpack.hrb 0
 
-haribote.sys : haribote.nas Makefile
-	$(NASK) haribote.nas haribote.sys haribote.lst
+haribote.sys : asmhead.bin bootpack.hrb Makefile
+	$(HARITOL) concat haribote.sys asmhead.bin bootpack.hrb
 
 haribote.img : ipl.bin haribote.sys Makefile
 	$(EDIMG) imgin:$(Z_TOOLS)fdimg0at.tek \
@@ -77,4 +76,4 @@ clean :
 
 src_only :
 	make clean
-	rm helloos.img
+	rm haribote.img
