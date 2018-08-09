@@ -1,5 +1,5 @@
 Z_TOOLS	= ./z_tools/
-INPACH 	= ./ztools/haribote/
+INPACH 	= ./z_tools/haribote/
 
 NASK 	= $(Z_TOOLS)nask
 EDIMG 	= $(Z_TOOLS)edimg
