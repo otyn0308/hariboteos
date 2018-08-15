@@ -32,7 +32,7 @@ bootpack.obj : bootpack.nas Makefile
 naskfunc.obj : naskfunc.nas Makefile
 	$(NASK) naskfunc.nas naskfunc.obj naskfunc.lst
 
-bootpack.bim : bootpack.obj Makefile
+bootpack.bim : bootpack.obj naskfunc.obj Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \
 	  bootpack.obj \
 	  naskfunc.obj
