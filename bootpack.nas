@@ -3,31 +3,13 @@
 [OPTIMIZE 1]
 [OPTION 1]
 [BITS 32]
-	EXTERN	_font_A.0
+	EXTERN	_hankaku
 	EXTERN	_io_hlt
 	EXTERN	_io_load_eflags
 	EXTERN	_io_cli
 	EXTERN	_io_out8
 	EXTERN	_io_store_eflags
 [FILE "bootpack.c"]
-[SECTION .data]
-_font_A.0:
-	DB	0
-	DB	24
-	DB	24
-	DB	24
-	DB	24
-	DB	36
-	DB	36
-	DB	36
-	DB	36
-	DB	126
-	DB	66
-	DB	66
-	DB	66
-	DB	-25
-	DB	0
-	DB	0
 [SECTION .text]
 	GLOBAL	_HariMain
 _HariMain:
@@ -40,20 +22,63 @@ _HariMain:
 	PUSH	EAX
 	PUSH	DWORD [4088]
 	CALL	_init_screen
-	PUSH	_font_A.0
+	PUSH	_hankaku+1040
 	PUSH	7
-	PUSH	10
-	PUSH	10
+	PUSH	8
+	PUSH	8
 	MOVSX	EAX,WORD [4084]
 	PUSH	EAX
 	PUSH	DWORD [4088]
 	CALL	_putfont8
 	ADD	ESP,36
+	PUSH	_hankaku+1056
+	PUSH	7
+	PUSH	8
+	PUSH	16
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfont8
+	PUSH	_hankaku+1072
+	PUSH	7
+	PUSH	8
+	PUSH	24
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfont8
+	ADD	ESP,48
+	PUSH	_hankaku+784
+	PUSH	7
+	PUSH	8
+	PUSH	40
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfont8
+	PUSH	_hankaku+800
+	PUSH	7
+	PUSH	8
+	PUSH	48
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfont8
+	ADD	ESP,48
+	PUSH	_hankaku+816
+	PUSH	7
+	PUSH	8
+	PUSH	56
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfont8
+	ADD	ESP,24
 L2:
 	CALL	_io_hlt
 	JMP	L2
 [SECTION .data]
-_table_rgb.1:
+_table_rgb.0:
 	DB	0
 	DB	0
 	DB	0
@@ -107,7 +132,7 @@ _table_rgb.1:
 _init_palette:
 	PUSH	EBP
 	MOV	EBP,ESP
-	PUSH	_table_rgb.1
+	PUSH	_table_rgb.0
 	PUSH	15
 	PUSH	0
 	CALL	_set_palette
