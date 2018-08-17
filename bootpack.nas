@@ -3,6 +3,7 @@
 [OPTIMIZE 1]
 [OPTION 1]
 [BITS 32]
+	EXTERN	_sprintf
 	EXTERN	_io_hlt
 	EXTERN	_io_load_eflags
 	EXTERN	_io_cli
@@ -15,11 +16,16 @@ LC0:
 	DB	"ABC 123",0x00
 LC1:
 	DB	"Otyn0308",0x00
+LC2:
+	DB	"scrnx = %d",0x00
 [SECTION .text]
 	GLOBAL	_HariMain
 _HariMain:
 	PUSH	EBP
 	MOV	EBP,ESP
+	PUSH	EBX
+	SUB	ESP,48
+	LEA	EBX,DWORD [-52+EBP]
 	CALL	_init_palette
 	MOVSX	EAX,WORD [4086]
 	PUSH	EAX
@@ -40,6 +46,20 @@ _HariMain:
 	PUSH	0
 	PUSH	31
 	PUSH	31
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfonts8_asc
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	LC2
+	PUSH	EBX
+	CALL	_sprintf
+	ADD	ESP,36
+	PUSH	EBX
+	PUSH	7
+	PUSH	64
+	PUSH	16
 	MOVSX	EAX,WORD [4084]
 	PUSH	EAX
 	PUSH	DWORD [4088]
