@@ -16,41 +16,17 @@ HARITOL	= $(Z_TOOLS)haritol
 default :
 	make img
 
-ipl.bin : ipl.nas Makefile
-	$(NASK) ipl.nas ipl.bin ipl.lst
+%.bin : %.nas Makefile
+	$(NASK) $*.nas $*.bin $*.lst
 
-asmhead.bin : asmhead.nas Makefile
-	$(NASK) asmhead.nas asmhead.bin asmhead.lst
+%.gas : %.c Makefile
+	$(CC1) -o $*.gas $*.c
 
-bootpack.gas : bootpack.c Makefile
-	$(CC1) -o bootpack.gas bootpack.c
+%.nas : %.gas Makefile
+	$(GAS2NASK) $*.gas $*.nas
 
-graphic.gas : graphic.c Makefile
-	$(CC1) -o graphic.gas graphic.c
-
-dsctbl.gas : dsctbl.c Makefile
-	$(CC1) -o dsctbl.gas dsctbl.c
-
-bootpack.nas : bootpack.gas Makefile
-	$(GAS2NASK) bootpack.gas bootpack.nas
-
-graphic.nas : graphic.gas Makefile
-	$(GAS2NASK) .gas .nas
-
-dsctbl.nas : dsctbl.gas Makefile
-	$(GAS2NASK) dsctbl.gas dsctbl.nas
-
-bootpack.obj : bootpack.nas Makefile
-	$(NASK) bootpack.nas bootpack.obj bootpack.lst
-
-graphic.obj : graphic.nas Makefile
-	$(NASK) graphic.nas graphic.obj graphic.lst
-
-dsctbl.obj : dsctbl.nas Makefile
-	$(NASK) dsctbl.nas dsctbl.obj dsctbl.lst
-
-naskfunc.obj : naskfunc.nas Makefile
-	$(NASK) naskfunc.nas naskfunc.obj naskfunc.lst
+%.obj : %.nas Makefile
+	$(NASK) $*.nas $*.obj $*.lst
 
 hankaku.bin : hankaku.txt Makefile
 	$(MAKEFONT) hankaku.txt hankaku.bin
