@@ -3,8 +3,11 @@
 *.bin
 *.lst
 *.obj
+*.gas
 
+bootpack.nas
+dsctbl.nas
+graphic.nas
 bootpack.bim
-bootpack.gas
 bootpack.hrb
 bootpack.map
