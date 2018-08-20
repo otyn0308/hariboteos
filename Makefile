@@ -25,11 +25,29 @@ asmhead.bin : asmhead.nas Makefile
 bootpack.gas : bootpack.c Makefile
 	$(CC1) -o bootpack.gas bootpack.c
 
+graphic.gas : graphic.c Makefile
+	$(CC1) -o graphic.gas graphic.c
+
+dsctbl.gas : dsctbl.c Makefile
+	$(CC1) -o dsctbl.gas dsctbl.c
+
 bootpack.nas : bootpack.gas Makefile
 	$(GAS2NASK) bootpack.gas bootpack.nas
 
+graphic.nas : graphic.gas Makefile
+	$(GAS2NASK) .gas .nas
+
+dsctbl.nas : dsctbl.gas Makefile
+	$(GAS2NASK) dsctbl.gas dsctbl.nas
+
 bootpack.obj : bootpack.nas Makefile
 	$(NASK) bootpack.nas bootpack.obj bootpack.lst
+
+graphic.obj : graphic.nas Makefile
+	$(NASK) graphic.nas graphic.obj graphic.lst
+
+dsctbl.obj : dsctbl.nas Makefile
+	$(NASK) dsctbl.nas dsctbl.obj dsctbl.lst
 
 naskfunc.obj : naskfunc.nas Makefile
 	$(NASK) naskfunc.nas naskfunc.obj naskfunc.lst
@@ -42,7 +60,7 @@ hankaku.obj : hankaku.bin Makefile
 
 bootpack.bim : bootpack.obj naskfunc.obj hankaku.obj Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \
-	  bootpack.obj naskfunc.obj hankaku.obj
+	  bootpack.obj naskfunc.obj graphic.obj dsctbl.obj hankaku.obj
 
 bootpack.hrb : bootpack.bim Makefile
 	$(BIM2HRB) bootpack.bim bootpack.hrb 0
