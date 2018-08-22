@@ -4,6 +4,7 @@
 [OPTION 1]
 [BITS 32]
 	EXTERN	_init_gdtidt
+	EXTERN	_init_pic
 	EXTERN	_init_palette
 	EXTERN	_init_screen8
 	EXTERN	_init_mouse_cursor8
@@ -26,6 +27,7 @@ _HariMain:
 	LEA	EBX,DWORD [-316+EBP]
 	SUB	ESP,304
 	CALL	_init_gdtidt
+	CALL	_init_pic
 	CALL	_init_palette
 	MOVSX	EAX,WORD [4086]
 	PUSH	EAX

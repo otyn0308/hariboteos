@@ -2,11 +2,13 @@
 #include <stdio.h>
 
 void HariMain(void){
-  struct BOOTINFO *binfo = (struct BOOTINFO *) 0x0ff0;
+  struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
   char s[40], mcursor[256];
   int mx, my;
 
   init_gdtidt();
+  init_pic();
+
   init_palette();
   init_screen8(binfo->vram, binfo->scrnx, binfo->scrny);
   mx = (binfo->scrnx - 16) / 2;
