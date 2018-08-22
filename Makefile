@@ -45,7 +45,7 @@ haribote.sys : asmhead.bin bootpack.hrb Makefile
 	$(HARITOL) concat haribote.sys asmhead.bin bootpack.hrb
 
 haribote.img : ipl.bin haribote.sys Makefile
-	$(EDIMG) imgin:$(Z_TOOLS)fdimg0at.tek \
+	$(EDIMG) imgin:./z_tools/fdimg0at.tek \
 		wbinimg src:ipl.bin len:512 from:0 to:0 \
 		copy from:haribote.sys to:@: \
 		imgout:haribote.img

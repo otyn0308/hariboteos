@@ -5,12 +5,14 @@
 [BITS 32]
 	EXTERN	_init_gdtidt
 	EXTERN	_init_pic
+	EXTERN	_io_sti
 	EXTERN	_init_palette
 	EXTERN	_init_screen8
 	EXTERN	_init_mouse_cursor8
 	EXTERN	_putblock8_8
 	EXTERN	_sprintf
 	EXTERN	_putfonts8_asc
+	EXTERN	_io_out8
 	EXTERN	_io_hlt
 [FILE "bootpack.c"]
 [SECTION .data]
@@ -28,6 +30,7 @@ _HariMain:
 	SUB	ESP,304
 	CALL	_init_gdtidt
 	CALL	_init_pic
+	CALL	_io_sti
 	CALL	_init_palette
 	MOVSX	EAX,WORD [4086]
 	PUSH	EAX
@@ -77,6 +80,13 @@ _HariMain:
 	PUSH	DWORD [4088]
 	CALL	_putfonts8_asc
 	ADD	ESP,40
+	PUSH	249
+	PUSH	33
+	CALL	_io_out8
+	PUSH	239
+	PUSH	161
+	CALL	_io_out8
+	ADD	ESP,16
 L2:
 	CALL	_io_hlt
 	JMP	L2
