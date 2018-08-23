@@ -6,18 +6,23 @@
 	EXTERN	_init_gdtidt
 	EXTERN	_init_pic
 	EXTERN	_io_sti
+	EXTERN	_io_out8
 	EXTERN	_init_palette
 	EXTERN	_init_screen8
 	EXTERN	_init_mouse_cursor8
 	EXTERN	_putblock8_8
 	EXTERN	_sprintf
 	EXTERN	_putfonts8_asc
-	EXTERN	_io_out8
-	EXTERN	_io_hlt
+	EXTERN	_io_cli
+	EXTERN	_keybuf
+	EXTERN	_boxfill8
+	EXTERN	_io_stihlt
 [FILE "bootpack.c"]
 [SECTION .data]
 LC0:
 	DB	"(%d, %d)",0x00
+LC1:
+	DB	"%02X",0x00
 [SECTION .text]
 	GLOBAL	_HariMain
 _HariMain:
@@ -31,6 +36,12 @@ _HariMain:
 	CALL	_init_gdtidt
 	CALL	_init_pic
 	CALL	_io_sti
+	PUSH	249
+	PUSH	33
+	CALL	_io_out8
+	PUSH	239
+	PUSH	161
+	CALL	_io_out8
 	CALL	_init_palette
 	MOVSX	EAX,WORD [4086]
 	PUSH	EAX
@@ -54,6 +65,7 @@ _HariMain:
 	PUSH	EBX
 	MOV	ESI,EAX
 	CALL	_init_mouse_cursor8
+	ADD	ESP,36
 	PUSH	16
 	PUSH	EBX
 	LEA	EBX,DWORD [-60+EBP]
@@ -65,7 +77,7 @@ _HariMain:
 	PUSH	EAX
 	PUSH	DWORD [4088]
 	CALL	_putblock8_8
-	ADD	ESP,52
+	ADD	ESP,32
 	PUSH	ESI
 	PUSH	EDI
 	PUSH	LC0
@@ -80,13 +92,38 @@ _HariMain:
 	PUSH	DWORD [4088]
 	CALL	_putfonts8_asc
 	ADD	ESP,40
-	PUSH	249
-	PUSH	33
-	CALL	_io_out8
-	PUSH	239
-	PUSH	161
-	CALL	_io_out8
-	ADD	ESP,16
 L2:
-	CALL	_io_hlt
+	CALL	_io_cli
+	CMP	BYTE [_keybuf+1],0
+	JE	L7
+	MOVZX	EBX,BYTE [_keybuf]
+	MOV	BYTE [_keybuf+1],0
+	CALL	_io_sti
+	PUSH	EBX
+	PUSH	LC1
+	LEA	EBX,DWORD [-60+EBP]
+	PUSH	EBX
+	CALL	_sprintf
+	PUSH	31
+	PUSH	15
+	PUSH	16
+	PUSH	0
+	PUSH	14
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_boxfill8
+	ADD	ESP,40
+	PUSH	EBX
+	PUSH	7
+	PUSH	16
+	PUSH	0
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfonts8_asc
+	ADD	ESP,24
+	JMP	L2
+L7:
+	CALL	_io_stihlt
 	JMP	L2
