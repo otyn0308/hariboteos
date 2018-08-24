@@ -21,10 +21,6 @@ void init_pic(void){
 
 #define PORT_KEYDAT  0x0060
 
-struct KEYBUF{
-  unsigned char data, flag;
-};
-
 struct KEYBUF keybuf;
 
 void inthandler21(int *esp){
