@@ -94,10 +94,23 @@ _HariMain:
 	ADD	ESP,40
 L2:
 	CALL	_io_cli
-	CMP	BYTE [_keybuf+1],0
-	JE	L7
+	MOV	EAX,DWORD [_keybuf+32]
+	TEST	EAX,EAX
+	JE	L14
+	INC	EAX
+	XOR	EDX,EDX
 	MOVZX	EBX,BYTE [_keybuf]
-	MOV	BYTE [_keybuf+1],0
+	MOV	DWORD [_keybuf+32],EAX
+	CMP	EDX,EAX
+	JGE	L13
+	MOV	ECX,EAX
+L11:
+	MOV	AL,BYTE [_keybuf+1+EDX]
+	MOV	BYTE [_keybuf+EDX],AL
+	INC	EDX
+	CMP	EDX,ECX
+	JL	L11
+L13:
 	CALL	_io_sti
 	PUSH	EBX
 	PUSH	LC1
@@ -124,6 +137,6 @@ L2:
 	CALL	_putfonts8_asc
 	ADD	ESP,24
 	JMP	L2
-L7:
+L14:
 	CALL	_io_stihlt
 	JMP	L2
