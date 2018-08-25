@@ -20,6 +20,7 @@
 	EXTERN	_fifo8_get
 	EXTERN	_boxfill8
 	EXTERN	_io_stihlt
+	EXTERN	_io_in8
 [FILE "bootpack.c"]
 [SECTION .data]
 LC0:
@@ -100,6 +101,7 @@ _HariMain:
 	PUSH	DWORD [4088]
 	CALL	_putfonts8_asc
 	ADD	ESP,40
+	CALL	_enable_mouse
 L2:
 	CALL	_io_cli
 	PUSH	_keyfifo
@@ -139,3 +141,43 @@ L2:
 L7:
 	CALL	_io_stihlt
 	JMP	L2
+	GLOBAL	_wait_KBC_sendready
+_wait_KBC_sendready:
+	PUSH	EBP
+	MOV	EBP,ESP
+L9:
+	PUSH	100
+	CALL	_io_in8
+	POP	ECX
+	AND	EAX,2
+	JNE	L9
+	LEAVE
+	RET
+	GLOBAL	_init_keyboard
+_init_keyboard:
+	PUSH	EBP
+	MOV	EBP,ESP
+	CALL	_wait_KBC_sendready
+	PUSH	96
+	PUSH	100
+	CALL	_io_out8
+	CALL	_wait_KBC_sendready
+	PUSH	71
+	PUSH	96
+	CALL	_io_out8
+	LEAVE
+	RET
+	GLOBAL	_enable_mouse
+_enable_mouse:
+	PUSH	EBP
+	MOV	EBP,ESP
+	CALL	_wait_KBC_sendready
+	PUSH	212
+	PUSH	100
+	CALL	_io_out8
+	CALL	_wait_KBC_sendready
+	PUSH	244
+	PUSH	96
+	CALL	_io_out8
+	LEAVE
+	RET
