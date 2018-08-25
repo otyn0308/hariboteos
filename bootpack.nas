@@ -8,6 +8,7 @@
 	EXTERN	_io_sti
 	EXTERN	_keyfifo
 	EXTERN	_fifo8_init
+	EXTERN	_mousefifo
 	EXTERN	_io_out8
 	EXTERN	_init_palette
 	EXTERN	_init_screen8
@@ -36,7 +37,7 @@ _HariMain:
 	PUSH	ESI
 	PUSH	EBX
 	LEA	EBX,DWORD [-316+EBP]
-	SUB	ESP,336
+	SUB	ESP,464
 	CALL	_init_gdtidt
 	CALL	_init_pic
 	CALL	_io_sti
@@ -45,12 +46,19 @@ _HariMain:
 	PUSH	32
 	PUSH	_keyfifo
 	CALL	_fifo8_init
+	LEA	EAX,DWORD [-476+EBP]
+	PUSH	EAX
+	PUSH	128
+	PUSH	_mousefifo
+	CALL	_fifo8_init
 	PUSH	249
 	PUSH	33
 	CALL	_io_out8
+	ADD	ESP,32
 	PUSH	239
 	PUSH	161
 	CALL	_io_out8
+	CALL	_init_keyboard
 	CALL	_init_palette
 	MOVSX	EAX,WORD [4086]
 	PUSH	EAX
@@ -58,9 +66,8 @@ _HariMain:
 	PUSH	EAX
 	PUSH	DWORD [4088]
 	CALL	_init_screen8
-	ADD	ESP,40
-	MOVSX	EAX,WORD [4084]
 	MOV	ECX,2
+	MOVSX	EAX,WORD [4084]
 	LEA	EDX,DWORD [-16+EAX]
 	MOV	EAX,EDX
 	CDQ
@@ -86,7 +93,7 @@ _HariMain:
 	PUSH	EAX
 	PUSH	DWORD [4088]
 	CALL	_putblock8_8
-	ADD	ESP,40
+	ADD	ESP,60
 	PUSH	ESI
 	PUSH	EDI
 	PUSH	LC0
@@ -106,9 +113,55 @@ L2:
 	CALL	_io_cli
 	PUSH	_keyfifo
 	CALL	_fifo8_status
+	PUSH	_mousefifo
+	MOV	EBX,EAX
+	CALL	_fifo8_status
+	LEA	EAX,DWORD [EAX+EBX*1]
+	POP	EBX
+	POP	ESI
+	TEST	EAX,EAX
+	JE	L11
+	PUSH	_keyfifo
+	CALL	_fifo8_status
+	POP	ECX
+	TEST	EAX,EAX
+	JNE	L12
+	PUSH	_mousefifo
+	CALL	_fifo8_status
 	POP	EDX
 	TEST	EAX,EAX
-	JE	L7
+	JE	L2
+	PUSH	_mousefifo
+	CALL	_fifo8_get
+	MOV	EBX,EAX
+	CALL	_io_sti
+	PUSH	EBX
+	LEA	EBX,DWORD [-60+EBP]
+	PUSH	LC1
+	PUSH	EBX
+	CALL	_sprintf
+	PUSH	31
+	PUSH	47
+	PUSH	16
+	PUSH	32
+	PUSH	14
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_boxfill8
+	ADD	ESP,44
+	PUSH	EBX
+	PUSH	7
+	PUSH	16
+	PUSH	32
+L10:
+	MOVSX	EAX,WORD [4084]
+	PUSH	EAX
+	PUSH	DWORD [4088]
+	CALL	_putfonts8_asc
+	ADD	ESP,24
+	JMP	L2
+L12:
 	PUSH	_keyfifo
 	CALL	_fifo8_get
 	MOV	EBX,EAX
@@ -132,25 +185,20 @@ L2:
 	PUSH	7
 	PUSH	16
 	PUSH	0
-	MOVSX	EAX,WORD [4084]
-	PUSH	EAX
-	PUSH	DWORD [4088]
-	CALL	_putfonts8_asc
-	ADD	ESP,24
-	JMP	L2
-L7:
+	JMP	L10
+L11:
 	CALL	_io_stihlt
 	JMP	L2
 	GLOBAL	_wait_KBC_sendready
 _wait_KBC_sendready:
 	PUSH	EBP
 	MOV	EBP,ESP
-L9:
+L14:
 	PUSH	100
 	CALL	_io_in8
-	POP	ECX
+	POP	EDX
 	AND	EAX,2
-	JNE	L9
+	JNE	L14
 	LEAVE
 	RET
 	GLOBAL	_init_keyboard
