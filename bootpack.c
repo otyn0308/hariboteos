@@ -3,6 +3,7 @@
 
 struct MOUSE_DEC{
   unsigned char buf[3], phase;
+  int x, y, btn;
 };
 
 extern struct FIFO8 keyfifo, mousefifo;
@@ -44,17 +45,26 @@ void HariMain(void){
       io_stihlt();
     }else{
       if(fifo8_status(&keyfifo) != 0){
-      i = fifo8_get(&keyfifo);
-      io_sti();
-      sprintf(s, "%02X", i);
-      boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);
-      putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
+        i = fifo8_get(&keyfifo);
+        io_sti();
+        sprintf(s, "%02X", i);
+        boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);
+        putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
       }else if(fifo8_status(&mousefifo) != 0){
         i = fifo8_get(&mousefifo);
         io_sti();
         if(mouse_decode(&mdec, i) != 0){
-          sprintf(s, "%02X %02X %02X", mdec.buf[0],  mdec.buf[1], mdec.buf[2]);
-          boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 32, 16, 32 + 8 * 8 - 1, 31);
+          sprintf(s, "[icr %4d %4d]", mdec.x, mdec.y);
+          if((mdec.btn & 0x01) != 0){
+            s[1] = 'L';
+          }
+          if((mdec.btn & 0x02) != 0){
+            s[3] = 'R';
+          }
+          if((mdec.btn & 0x04) != 0){
+            s[2] = 'C';
+          }
+          boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 32, 16, 32 + 15 * 8 - 1, 31);
           putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, COL8_FFFFFF, s);
         }
       }
@@ -94,6 +104,7 @@ void enable_mouse(struct MOUSE_DEC *mdec){
   io_out8(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
   wait_KBC_sendready();
   io_out8(PORT_KEYDAT, MOUSECMD_ENABLE);
+  mdec->phase = 0;
   return;
 }
 
@@ -117,6 +128,16 @@ int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat){
   if(mdec->phase == 3){
     mdec->buf[2] = dat;
     mdec->phase = 1;
+    mdec->btn = mdec->buf[0] & 0x07;
+    mdec->x = mdec->buf[1];
+    mdec->y = mdec->buf[2];
+    if((mdec->buf[0] & 0x10) != 0){
+      mdec->x |= 0xffffff00;
+    }
+    if((mdec->buf[0] & 0x20) != 0){
+      mdec->y |= 0xffffff00;
+    }
+    mdec->y = - mdec->y;
     return 1;
   }
   return -1;
