@@ -26,6 +26,7 @@
 	EXTERN	_io_stihlt
 	EXTERN	_io_load_eflags
 	EXTERN	_io_store_eflags
+	EXTERN	_memtest_sub
 	EXTERN	_load_cr0
 	EXTERN	_store_cr0
 [FILE "bootpack.c"]
@@ -372,19 +373,3 @@ L26:
 	CALL	_store_cr0
 	POP	ECX
 	JMP	L24
-	GLOBAL	_memtest_sub
-_memtest_sub:
-	PUSH	EBP
-	MOV	EBP,ESP
-	MOV	EDX,DWORD [12+EBP]
-	MOV	EAX,DWORD [8+EBP]
-	CMP	EAX,EDX
-	JA	L30
-L36:
-L34:
-	ADD	EAX,4096
-	CMP	EAX,EDX
-	JBE	L36
-L30:
-	POP	EBP
-	RET
