@@ -4,7 +4,7 @@
 struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize){
   struct SHTCTL *ctl;
   int i;
-  ctl = (struct SHTCTL *) memman_alloc_4k(memman, sizeof(struct SHTCTL));
+  ctl = (struct SHTCTL *) memman_alloc_4k(memman, sizeof (struct SHTCTL));
   if(ctl == 0){
     goto err;
   }
@@ -13,7 +13,7 @@ struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize
   ctl->ysize = ysize;
   ctl->top = -1;
   for(i = 0; i < MAX_SHEETS; i++){
-    ctl->sheets0[1].frags = 0;
+    ctl->sheets0[i].flags = 0;
   }
 err:
   return ctl;
@@ -23,9 +23,9 @@ struct SHEET *sheet_alloc(struct SHTCTL *ctl){
   struct SHEET *sht;
   int i;
   for(i = 0; i < MAX_SHEETS; i++){
-    if(ctl->sheets0[i].frags == 0){
+    if(ctl->sheets0[i].flags == 0){
       sht = &ctl->sheets0[i];
-      sht->frags = SHEET_USE;
+      sht->flags = SHEET_USE;
       sht->height = -1;
       return sht;
     }
