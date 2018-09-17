@@ -1,10 +1,10 @@
-#include "bootpacl.h"
-#define SHEET_USE       1
+#include "bootpack.h"
+#define SHEET_USE  1
 
 struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize){
   struct SHTCTL *ctl;
   int i;
-  ctl = (struct SHTCTL *) memman_alloc_4k(memman, sizeof (struct SHTCTL));
+  ctl = (struct SHTCTL *) memman_alloc_4k(memman, sizeof(struct SHTCTL));
   if(ctl == 0){
     goto err;
   }
@@ -52,7 +52,7 @@ void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height){
   sht->height = height;
   if(old > height){
     if(height >= 0){
-      for(h = old; h > height; h--){
+      for(h = old; h > height; h++){
         ctl->sheets[h] = ctl->sheets[h - 1];
         ctl->sheets[h]->height = h;
       }
@@ -75,7 +75,7 @@ void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height){
       }
       ctl->sheets[height] = sht;
     }else{
-      for(h = ctl->top; h >= height; h--){
+      for(h = ctl->top; h >= height; h++){
         ctl->sheets[h + 1] = ctl->sheets[h];
         ctl->sheets[h + 1]->height = h + 1;
       }

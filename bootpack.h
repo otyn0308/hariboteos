@@ -7,7 +7,6 @@ struct BOOTINFO{
   short scrnx, scrny;
   char *vram;
 };
-
 #define ADR_BOOTINFO 0x00000ff0
 
 /* naskfunc.nas */
@@ -48,7 +47,6 @@ void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s
 void init_mouse_cursor8(char *mouse, char bc);
 void putblock8_8(char *vram, int vxsize, int pxsize,
     int pysize, int px0, int py0, char *buf, int bxsize);
-
 #define COL8_000000		0
 #define COL8_FF0000		1
 #define COL8_00FF00		2
@@ -72,13 +70,11 @@ struct SEGMENT_DESCRIPTOR{
   char base_mid, access_right;
   char limit_high, base_high;
 };
-
 struct GATE_DESCRIPTOR{
   short offset_low, selector;
   char dw_count, access_right;
   short offset_high;
 };
-
 void init_gdtidt(void);
 void set_segmdesc(struct SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base, int ar);
 void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
@@ -93,14 +89,8 @@ void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
 #define AR_INTGATE32    0x008e
 
 /* int.c */
-struct KEYBUF{
-  unsigned char data[32];
-  int next_r, next_w, len;
-};
 void init_pic(void);
-void inthandler21(int *esp);
 void inthandler27(int *esp);
-void inthandler2c(int *esp);
 #define PIC0_ICW1       0x0020
 #define PIC0_OCW2       0x0020
 #define PIC0_IMR        0X0021
@@ -135,16 +125,13 @@ extern struct FIFO8 mousefifo;
 /* memory.c */
 #define MEMMAN_FREES        4090
 #define MEMMAN_ADDR         0x003c0000
-
 struct FREEINFO{
   unsigned int addr, size;
 };
-
 struct MEMMAN{
   int frees, maxfrees, lostsize, losts;
   struct FREEINFO free[MEMMAN_FREES];
 };
-
 unsigned int memtest(unsigned int start, unsigned int end);
 void memman_init(struct MEMMAN *man);
 unsigned int memman_total(struct MEMMAN *man);
@@ -172,4 +159,3 @@ void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height);
 void sheet_refresh(struct SHTCTL *ctl);
 void sheet_slide(struct SHTCTL *ctl, struct SHEET *sht, int vx0, int vy0);
 void sheet_free(struct SHTCTL *ctl, struct SHEET *sht);
-
