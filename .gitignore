@@ -5,6 +5,7 @@
 *.obj
 *.gas
 
+sheet.nas
 bootpack.nas
 dsctbl.nas
 graphic.nas
