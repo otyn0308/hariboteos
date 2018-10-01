@@ -5,7 +5,7 @@ void make_window8(unsigned char *buf, int xsize, int ysize, char *title);
 
 void HariMain(void){
   struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-  struct FIFO8 timerfifo;
+  struct FIFO8 timerfifo, timerfifo2, timerfifo3;
   char s[40], keybuf[32], mousebuf[128], timerbuf[8];
   int mx, my, i;
   unsigned int memtotal;
