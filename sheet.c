@@ -4,11 +4,11 @@
 struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize){
   struct SHTCTL *ctl;
   int i;
-  ctl = (struct SHTCTL *) memman_alloc_4k(memman, sizeof(struct SHTCTL));
+  ctl = (struct SHTCTL *) memman_alloc_4k(memman, sizeof (struct SHTCTL));
   if(ctl == 0){
     goto err;
   }
-  ctl->map = (unsigned char *)memman_alloc_4k(memman, xsize * ysize);
+  ctl->map = (unsigned char *) memman_alloc_4k(memman, xsize * ysize);
   if(ctl->map == 0){
     memman_free_4k(memman, (int) ctl, sizeof(struct SHTCTL));
     goto err;
@@ -143,6 +143,7 @@ void sheet_updown(struct SHEET *sht, int height){
     }
     sheet_refreshmap(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, 0);
     sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, 0, old - 1);
+
   }else if(old < height){
     if(old >= 0){
       for(h = old; h < height; h++){
