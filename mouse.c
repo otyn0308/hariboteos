@@ -4,7 +4,7 @@ struct FIFO32 *mousefifo;
 int mousedata0;
 
 void inthandler2c(int *esp){
-  int data; 
+  int data;
   io_out8(PIC1_OCW2, 0x64);
   io_out8(PIC0_OCW2, 0x62);
   data = io_in8(PORT_KEYDAT);

@@ -91,7 +91,7 @@ void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, in
   for(h = h0; h <= h1; h++){
     sht = ctl->sheets[h];
     buf = sht->buf;
-    sid = sht- ctl->sheets0;
+    sid = sht - ctl->sheets0;
     bx0 = vx0 - sht->vx0;
     by0 = vy0 - sht->vy0;
     bx1 = vx1 - sht->vx0;
@@ -130,8 +130,8 @@ void sheet_updown(struct SHEET *sht, int height){
         ctl->sheets[h]->height = h;
       }
       ctl->sheets[height] = sht;
-      sheet_refreshmap(ctl, sht->vx0, sht->vy0, sht->vy0 + sht->bxsize, sht->vy0 + sht->bysize, height + 1);
-      sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vy0 + sht->bxsize, sht->vy0 + sht->bysize, height + 1, old);
+      sheet_refreshmap(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, height + 1);
+      sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, height + 1, old);
     }else{
       if(ctl->top > old){
         for(h = old; h < ctl->top; h++){
@@ -140,10 +140,9 @@ void sheet_updown(struct SHEET *sht, int height){
         }
       }
       ctl->top--;
+      sheet_refreshmap(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, 0);
+      sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, 0, old - 1);
     }
-    sheet_refreshmap(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, 0);
-    sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, 0, old - 1);
-
   }else if(old < height){
     if(old >= 0){
       for(h = old; h < height; h++){
@@ -180,7 +179,7 @@ void sheet_slide(struct SHEET *sht, int vx0, int vy0){
   if(sht->height >= 0){
     sheet_refreshmap(ctl, old_vx0, old_vy0, old_vx0 + sht->bxsize, old_vy0 + sht->bysize, 0);
     sheet_refreshmap(ctl, vx0, vy0, vx0 + sht->bxsize, vy0 + sht->bysize, sht->height);
-    sheet_refreshsub(ctl, old_vx0, old_vy0, old_vx0 + sht->bxsize, old_vy0 + sht->bysize, 0, sht->height -1);
+    sheet_refreshsub(ctl, old_vx0, old_vy0, old_vx0 + sht->bxsize, old_vy0 + sht->bysize, 0, sht->height - 1);
     sheet_refreshsub(ctl, vx0, vy0, vx0 + sht->bxsize, vy0 + sht->bysize, sht->height, sht->height);
   }
   return;
