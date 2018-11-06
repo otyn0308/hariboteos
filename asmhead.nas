@@ -15,7 +15,7 @@ VRAM	EQU		0x0ff8
 
 		ORG		0xc200
 
-		MOV		AL,0x13		;VBAグラフィックス, 320x200x8bitカラー
+		MOV		AL,0x13
 		MOV		AH,0x00
 		INT		0x10
 		MOV		BYTE [VMODE],8
@@ -69,7 +69,7 @@ pipelineflush:
 		MOV		EDI,DSKCAC+512
 		MOV		ECX,0
 		MOV		CL,BYTE [CYLS]
-		IMUL	ECX,521*18*2/4
+		IMUL	ECX,512*18*2/4
 		SUB		ECX,512/4
 		CALL	memcpy
 

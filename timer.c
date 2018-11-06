@@ -15,8 +15,6 @@ void init_pit(void){
   io_out8(PIT_CNT0, 0x9c);
   io_out8(PIT_CNT0, 0x2e);
   timerctl.count = 0;
-  timerctl.next = 0xffffffff;
-  timerctl.using = 0;
   for(i = 0; i < MAX_TIMER; i++){
     timerctl.timers0[i].flags = 0;
   }
@@ -58,7 +56,6 @@ void timer_settime(struct TIMER *timer, unsigned int timeout){
   timer->flags = TIMER_FLAGS_USING;
   e = io_load_eflags();
   io_cli();
-  timerctl.using++;
   t = timerctl.t0;
   if(timer->timeout <= t->timeout){
     timerctl.t0 = timer;

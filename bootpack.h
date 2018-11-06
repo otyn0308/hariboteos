@@ -94,7 +94,7 @@ void init_pic(void);
 void inthandler27(int *esp);
 #define PIC0_ICW1       0x0020
 #define PIC0_OCW2       0x0020
-#define PIC0_IMR        0X0021
+#define PIC0_IMR        0x0021
 #define PIC0_ICW2       0x0021
 #define PIC0_ICW3       0x0021
 #define PIC0_ICW4       0x0021
@@ -169,7 +169,7 @@ struct TIMER{
   int data;
 };
 struct TIMERCTL{
-  unsigned int count, next, using;
+  unsigned int count, next;
   struct TIMER *t0;
   struct TIMER timers0[MAX_TIMER];
 };

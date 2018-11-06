@@ -19,7 +19,7 @@ default :
 %.bin : %.nas Makefile
 	$(NASK) $*.nas $*.bin $*.lst
 
-%.gas : %.c Makefile
+%.gas : %.c bootpack.h Makefile
 	$(CC1) -o $*.gas $*.c
 
 %.nas : %.gas Makefile

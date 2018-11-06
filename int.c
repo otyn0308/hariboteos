@@ -15,8 +15,8 @@ void init_pic(void){
   io_out8(PIC1_ICW3, 2);
   io_out8(PIC1_ICW4, 0x01);
   
-  io_out8(PIC0_IMR,0xfb);
-  io_out8(PIC1_IMR,0xff);
+  io_out8(PIC0_IMR, 0xfb);
+  io_out8(PIC1_IMR, 0xff);
   return;
 }
 
