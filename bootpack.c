@@ -55,7 +55,7 @@ void HariMain(void){
   sheet_setbuf(sht_win, buf_win, 160, 52, -1);
   init_screen8(buf_back, binfo->scrnx, binfo->scrny);
   init_mouse_cursor8(buf_mouse, 99);
-  make_window8(buf_win, 160, 52, "timer");
+  make_window8(buf_win, 160, 52, "counter");
   sheet_slide(sht_back, 0, 0);
   mx = (binfo->scrnx - 16) / 2;
   my = (binfo->scrny - 28 - 16) / 2;
