@@ -38,6 +38,7 @@ int fifo32_get(struct FIFO32 *fifo){
   fifo->free++;
   return data;
 }
+
 int fifo32_status(struct FIFO32 *fifo){
   return fifo->size - fifo->free;
 }

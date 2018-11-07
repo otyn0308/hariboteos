@@ -7,7 +7,7 @@ struct BOOTINFO{
   short scrnx, scrny;
   char *vram;
 };
-#define ADR_BOOTINFO 0x00000ff0
+#define ADR_BOOTINFO  0x00000ff0
 
 /* naskfunc.nas */
 void io_hlt(void);
@@ -46,24 +46,23 @@ void init_screen8(char *vram, int x, int y);
 void putfont8(char *vram, int xsize, int x, int y, char c, char *font);
 void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s);
 void init_mouse_cursor8(char *mouse, char bc);
-void putblock8_8(char *vram, int vxsize, int pxsize,
-    int pysize, int px0, int py0, char *buf, int bxsize);
-#define COL8_000000		0
-#define COL8_FF0000		1
-#define COL8_00FF00		2
-#define COL8_FFFF00		3
-#define COL8_0000FF		4
-#define COL8_FF00FF		5
-#define COL8_00FFFF		6
-#define COL8_FFFFFF		7
-#define COL8_C6C6C6		8
-#define COL8_840000		9
-#define COL8_008400		10
-#define COL8_848400		11
-#define COL8_000084		12
-#define COL8_840084		13
-#define COL8_008484		14
-#define COL8_848484		15
+void putblock8_8(char *vram, int vxsize, int pxsize, int pysize, int px0, int py0, char *buf, int bxsize);
+#define COL8_000000    0
+#define COL8_FF0000    1
+#define COL8_00FF00    2
+#define COL8_FFFF00    3
+#define COL8_0000FF    4
+#define COL8_FF00FF    5
+#define COL8_00FFFF    6
+#define COL8_FFFFFF    7
+#define COL8_C6C6C6    8
+#define COL8_840000    9
+#define COL8_008400    10
+#define COL8_848400    11
+#define COL8_000084    12
+#define COL8_840084    13
+#define COL8_008484    14
+#define COL8_848484    15
 
 /* dsctbl.c */
 struct SEGMENT_DESCRIPTOR{
@@ -79,38 +78,38 @@ struct GATE_DESCRIPTOR{
 void init_gdtidt(void);
 void set_segmdesc(struct SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base, int ar);
 void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
-#define ADR_IDT			0x0026f800
-#define LIMIT_IDT		0x000007ff
-#define ADR_GDT			0x00270000
-#define LIMIT_GDT		0x0000ffff
-#define ADR_BOTPAK		0x00280000
-#define LIMIT_BOTPAK	0x0007ffff
-#define AR_DATA32_RW	0x4092
-#define AR_CODE32_ER	0x409a
-#define AR_INTGATE32    0x008e
+#define ADR_IDT      0x0026f800
+#define LIMIT_IDT    0x000007ff
+#define ADR_GDT      0x00270000
+#define LIMIT_GDT    0x0000ffff
+#define ADR_BOTPAK    0x00280000
+#define LIMIT_BOTPAK  0x0007ffff
+#define AR_DATA32_RW  0x4092
+#define AR_CODE32_ER  0x409a
+#define AR_INTGATE32  0x008e
 
 /* int.c */
 void init_pic(void);
 void inthandler27(int *esp);
-#define PIC0_ICW1       0x0020
-#define PIC0_OCW2       0x0020
-#define PIC0_IMR        0x0021
-#define PIC0_ICW2       0x0021
-#define PIC0_ICW3       0x0021
-#define PIC0_ICW4       0x0021
-#define PIC1_ICW1       0x00a0
-#define PIC1_OCW2       0x00a0
-#define PIC1_IMR        0x00a1
-#define PIC1_ICW2       0x00a1
-#define PIC1_ICW3       0x00a1
-#define PIC1_ICW4       0x00a1
+#define PIC0_ICW1    0x0020
+#define PIC0_OCW2    0x0020
+#define PIC0_IMR    0x0021
+#define PIC0_ICW2    0x0021
+#define PIC0_ICW3    0x0021
+#define PIC0_ICW4    0x0021
+#define PIC1_ICW1    0x00a0
+#define PIC1_OCW2    0x00a0
+#define PIC1_IMR    0x00a1
+#define PIC1_ICW2    0x00a1
+#define PIC1_ICW3    0x00a1
+#define PIC1_ICW4    0x00a1
 
 /* keyboard.c */
 void inthandler21(int *esp);
 void wait_KBC_sendready(void);
 void init_keyboard(struct FIFO32 *fifo, int data0);
-#define PORT_KEYDAT     0x0060
-#define PORT_KEYCMD     0x0064
+#define PORT_KEYDAT    0x0060
+#define PORT_KEYCMD    0x0064
 
 /* mouse.c */
 struct MOUSE_DEC{
@@ -122,8 +121,8 @@ void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec);
 int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat);
 
 /* memory.c */
-#define MEMMAN_FREES        4090
-#define MEMMAN_ADDR         0x003c0000
+#define MEMMAN_FREES    4090
+#define MEMMAN_ADDR      0x003c0000
 struct FREEINFO{
   unsigned int addr, size;
 };
@@ -140,7 +139,7 @@ unsigned int memman_alloc_4k(struct MEMMAN *man, unsigned int size);
 int memman_free_4k(struct MEMMAN *man, unsigned int addr, unsigned int size);
 
 /* sheet.c */
-#define MAX_SHEETS      256
+#define MAX_SHEETS    256
 struct SHEET{
   unsigned char *buf;
   int bxsize, bysize, vx0, vy0, col_inv, height, flags;
@@ -161,7 +160,7 @@ void sheet_slide(struct SHEET *sht, int vx0, int vy0);
 void sheet_free(struct SHEET *sht);
 
 /* timer.c */
-#define MAX_TIMER       500
+#define MAX_TIMER    500
 struct TIMER{
   struct TIMER *next;
   unsigned int timeout, flags;

@@ -12,8 +12,8 @@ void inthandler2c(int *esp){
   return;
 }
 
-#define KEYCMD_SENDTO_MOUSE     0xd4
-#define MOUSECMD_ENABLE         0xf4
+#define KEYCMD_SENDTO_MOUSE    0xd4
+#define MOUSECMD_ENABLE      0xf4
 
 void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec){
   mousefifo = fifo;

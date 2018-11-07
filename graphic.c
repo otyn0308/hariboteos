@@ -2,7 +2,7 @@
 
 void init_palette(void){
   static unsigned char table_rgb[16 * 3] = {
-    0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00,
     0xff, 0x00, 0x00,
     0x00, 0xff, 0x00,
     0xff, 0xff, 0x00,
@@ -69,18 +69,18 @@ void init_screen8(char *vram, int x, int y){
 
 void putfont8(char *vram, int xsize, int x, int y, char c, char *font){
   int i;
-  char *p, d /* data */;
+  char *p, d;
   for(i = 0; i < 16; i++){
     p = vram + (y + i) * xsize + x;
     d = font[i];
-    if ((d & 0x80) != 0){ p[0] = c;}
-    if ((d & 0x40) != 0){ p[1] = c;}
-    if ((d & 0x20) != 0){ p[2] = c;}
-    if ((d & 0x10) != 0){ p[3] = c;}
-    if ((d & 0x08) != 0){ p[4] = c;}
-    if ((d & 0x04) != 0){ p[5] = c;}
-    if ((d & 0x02) != 0){ p[6] = c;}
-    if ((d & 0x01) != 0){ p[7] = c;}
+    if((d & 0x80) != 0){p[0] = c;}
+    if((d & 0x40) != 0){p[1] = c;}
+    if((d & 0x20) != 0){p[2] = c;}
+    if((d & 0x10) != 0){p[3] = c;}
+    if((d & 0x08) != 0){p[4] = c;}
+    if((d & 0x04) != 0){p[5] = c;}
+    if((d & 0x02) != 0){p[6] = c;}
+    if((d & 0x01) != 0){p[7] = c;}
   }
   return;
 }
@@ -127,12 +127,11 @@ void init_mouse_cursor8(char *mouse, char bc){
         mouse[y * 16 + x] = bc;
       }
     }
-  }  
+  }
   return;
 }
 
-void putblock8_8(char *vram, int vxsize, int pxsize,
-    int pysize, int px0, int py0, char *buf, int bxsize){
+void putblock8_8(char *vram, int vxsize, int pxsize, int pysize, int px0, int py0, char *buf, int bxsize){
   int x, y;
   for(y = 0; y < pysize; y++){
     for(x = 0; x < pxsize; x++){

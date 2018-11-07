@@ -1,12 +1,10 @@
 #include "bootpack.h"
-
-#define EFLAGS_AC_BIT		0x00040000
-#define CR0_CACHE_DISABLE	0x60000000
+#define EFLAGS_AC_BIT    0x00040000
+#define CR0_CACHE_DISABLE  0x60000000
 
 unsigned int memtest(unsigned int start, unsigned int end){
   char flg486 = 0;
   unsigned int eflg, cr0, i;
-
   eflg = io_load_eflags();
   eflg |= EFLAGS_AC_BIT;
   io_store_eflags(eflg);
@@ -16,15 +14,12 @@ unsigned int memtest(unsigned int start, unsigned int end){
   }
   eflg &= ~EFLAGS_AC_BIT;
   io_store_eflags(eflg);
-
   if(flg486 != 0){
     cr0 = load_cr0();
     cr0 |= CR0_CACHE_DISABLE;
     store_cr0(cr0);
   }
-
   i = memtest_sub(start, end);
-
   if(flg486 != 0){
     cr0 = load_cr0();
     cr0 &= ~CR0_CACHE_DISABLE;
@@ -40,6 +35,7 @@ void memman_init(struct MEMMAN *man){
   man->losts = 0;
   return;
 }
+
 unsigned int memman_total(struct MEMMAN *man){
   unsigned int i, t = 0;
   for(i = 0; i < man->frees; i++){
@@ -110,7 +106,7 @@ int memman_free(struct MEMMAN *man, unsigned int addr, unsigned int size){
   }
   man->losts++;
   man->lostsize += size;
-  return -1;
+  return -1; /* ���s�I�� */
 }
 
 unsigned int memman_alloc_4k(struct MEMMAN *man, unsigned int size){

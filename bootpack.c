@@ -61,8 +61,8 @@ void HariMain(void){
   my = (binfo->scrny - 28 - 16) / 2;
   sheet_slide(sht_mouse, mx, my);
   sheet_slide(sht_win, 80, 72);
-  sheet_updown(sht_back, 0);
-  sheet_updown(sht_win, 1);
+  sheet_updown(sht_back,  0);
+  sheet_updown(sht_win,   1);
   sheet_updown(sht_mouse, 2);
   sprintf(s, "(%3d, %3d)", mx, my);
   putfonts8_asc_sht(sht_back, 0, 0, COL8_FFFFFF, COL8_008484, s, 10);
@@ -76,9 +76,9 @@ void HariMain(void){
     if(fifo32_status(&fifo) == 0){
       io_sti();
     }else{
-        i = fifo32_get(&fifo);
-        io_sti();
-        if(256 <= i && i <= 511){
+      i = fifo32_get(&fifo);
+      io_sti();
+      if(256 <= i && i <= 511){
         sprintf(s, "%02X", i - 256);
         putfonts8_asc_sht(sht_back, 0, 16, COL8_FFFFFF, COL8_008484, s, 2);
       }else if(512 <= i && i <= 767){
@@ -118,14 +118,14 @@ void HariMain(void){
         putfonts8_asc_sht(sht_win, 40, 28, COL8_000000, COL8_C6C6C6, s, 10);
       }else if(i == 3){
         putfonts8_asc_sht(sht_back, 0, 80, COL8_FFFFFF, COL8_008484, "3[sec]", 6);
-        count = 0;
+        count = 0; /* �����J�n */
       }else if(i == 1){
         timer_init(timer3, &fifo, 0);
         boxfill8(buf_back, binfo->scrnx, COL8_FFFFFF, 8, 96, 15, 111);
         timer_settime(timer3, 50);
         sheet_refresh(sht_back, 8, 96, 16, 112);
       }else if(i == 0){
-        timer_init(timer3, &fifo, 1);
+        timer_init(timer3, &fifo, 1); /* ����1�� */
         boxfill8(buf_back, binfo->scrnx, COL8_008484, 8, 96, 15, 111);
         timer_settime(timer3, 50);
         sheet_refresh(sht_back, 8, 96, 16, 112);
@@ -136,20 +136,20 @@ void HariMain(void){
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
   static char closebtn[14][16] = {
-        "OOOOOOOOOOOOOOO@",
-        "OQQQQQQQQQQQQQ$@",
-        "OQQQQQQQQQQQQQ$@",
-        "OQQQ@@QQQQ@@QQ$@",
-        "OQQQQ@@QQ@@QQQ$@",
-        "OQQQQQ@@@@QQQQ$@",
-        "OQQQQQQ@@QQQQQ$@",
-        "OQQQQQ@@@@QQQQ$@",
-        "OQQQQ@@QQ@@QQQ$@",
-        "OQQQ@@QQQQ@@QQ$@",
-        "OQQQQQQQQQQQQQ$@",
-        "OQQQQQQQQQQQQQ$@",
-        "O$$$$$$$$$$$$$$@",
-        "@@@@@@@@@@@@@@@@"
+    "OOOOOOOOOOOOOOO@",
+    "OQQQQQQQQQQQQQ$@",
+    "OQQQQQQQQQQQQQ$@",
+    "OQQQ@@QQQQ@@QQ$@",
+    "OQQQQ@@QQ@@QQQ$@",
+    "OQQQQQ@@@@QQQQ$@",
+    "OQQQQQQ@@QQQQQ$@",
+    "OQQQQQ@@@@QQQQ$@",
+    "OQQQQ@@QQ@@QQQ$@",
+    "OQQQ@@QQQQ@@QQ$@",
+    "OQQQQQQQQQQQQQ$@",
+    "OQQQQQQQQQQQQQ$@",
+    "O$$$$$$$$$$$$$$@",
+    "@@@@@@@@@@@@@@@@"
   };
   int x, y;
   char c;

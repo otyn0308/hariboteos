@@ -1,5 +1,5 @@
 #include "bootpack.h"
-#define SHEET_USE  1
+#define SHEET_USE    1
 
 struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize){
   struct SHTCTL *ctl;
