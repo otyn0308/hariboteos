@@ -1,7 +1,8 @@
 ;asmhead.nas
 ;tab=4
+[INSTRSET "i486p"]
 
-VBEMODE EQU		0x107
+VBEMODE EQU		0x101
 BOTPAK	EQU		0x00280000
 DSKCAC	EQU		0x00100000
 DSKCAC0	EQU		0x00008000
@@ -82,14 +83,13 @@ keystatus:
 		OUT		0x60,AL
 		CALL	waitkbdout
 
-[INSTRSET "i486p"]
-
 		LGDT	[GDTR0]
 		MOV		EAX,CR0
 		AND		EAX,0x7fffffff
 		OR		EAX,0x00000001
 		MOV		CR0,EAX
 		JMP		pipelineflush
+
 pipelineflush:
 		MOV		AX,1*8
 		MOV		DS,AX
@@ -108,13 +108,13 @@ pipelineflush:
 		MOV		ECX,512/4
 		CALL	memcpy
 
-		MOV		ESI,DSKCAC0+512
-		MOV		EDI,DSKCAC+512
-		MOV		ECX,0
-		MOV		CL,BYTE [CYLS]
-		IMUL	ECX,512*18*2/4
-		SUB		ECX,512/4
-		CALL	memcpy
+;		MOV		ESI,DSKCAC0+512
+;		MOV		EDI,DSKCAC+512
+;		MOV		ECX,0
+;		MOV		CL,BYTE [CYLS]
+;		IMUL	ECX,512*18*2/4
+;		SUB		ECX,512/4
+;		CALL	memcpy
 
 		MOV		EBX,BOTPAK
 		MOV		ECX,[EBX+16]
@@ -125,6 +125,7 @@ pipelineflush:
 		ADD		ESI,EBX
 		MOV		EDI,[EBX+12]
 		CALL	memcpy
+
 skip:
 		MOV		ESP,[EBX+12]
 		JMP		DWORD 2*8:0x0000001b
@@ -145,15 +146,18 @@ memcpy:
 		RET
 
 		ALIGNB	16
+
 GDT0:
 		RESB	8
 		DW		0xffff,0x0000,0x9200,0x00cf
 		DW		0xffff,0x0000,0x9a28,0x0047
 
 		DW		0
+
 GDTR0:
 		DW		8*3-1
 		DD		GDT0
 
 		ALIGNB	16
+
 bootpack:

@@ -1,16 +1,16 @@
-Z_TOOLS	= ./z_tools/
-INPACH 	= ./z_tools/haribote/
+TOOLS	= ./tools/
+INPACH 	= ./tools/haribote/
 
-NASK 	= $(Z_TOOLS)nask
-CC1 	= $(Z_TOOLS)gocc1 -I$(INCPATH) -Os -Wall -quiet
-GAS2NASK= $(Z_TOOLS)gas2nask -a
-OBJ2BIM = $(Z_TOOLS)obj2bim
-MAKEFONT= $(Z_TOOLS)makefont
-BIN2OBJ = $(Z_TOOLS)bin2obj
-BIM2HRB	= $(Z_TOOLS)bim2hrb
-RULEFILE= haribote.rul
-EDIMG 	= $(Z_TOOLS)edimg
-HARITOL	= $(Z_TOOLS)haritol
+NASK 	= $(TOOLS)nask
+CC1 	= $(TOOLS)gocc1 -I$(INCPATH) -Os -Wall -quiet
+GAS2NASK= $(TOOLS)gas2nask -a
+OBJ2BIM = $(TOOLS)obj2bim
+MAKEFONT= $(TOOLS)makefont
+BIN2OBJ = $(TOOLS)bin2obj
+BIM2HRB	= $(TOOLS)bim2hrb
+RULEFILE= ./tools/haribote/haribote.rul
+EDIMG 	= $(TOOLS)edimg
+HARITOL	= $(TOOLS)haritol
 # デフォルト動作
 
 default :
@@ -45,7 +45,7 @@ haribote.sys : asmhead.bin bootpack.hrb Makefile
 	$(HARITOL) concat haribote.sys asmhead.bin bootpack.hrb
 
 haribote.img : ipl.bin haribote.sys Makefile
-	$(EDIMG) imgin:./z_tools/fdimg0at.tek \
+	$(EDIMG) imgin:./tools/fdimg0at.tek \
 		wbinimg src:ipl.bin len:512 from:0 to:0 \
 		copy from:haribote.sys to:@: \
 		imgout:haribote.img
@@ -59,7 +59,8 @@ img :
 
 run :
 	make img
-	qemu-system-i386 -fda haribote.img
+	cp haribote.img ./tools/qemu/fdimage0.bin
+	make -C ./tools/qemu
 
 clean :
 	rm *.bin
