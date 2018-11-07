@@ -106,7 +106,7 @@ int memman_free(struct MEMMAN *man, unsigned int addr, unsigned int size){
   }
   man->losts++;
   man->lostsize += size;
-  return -1; /* ���s�I�� */
+  return -1;
 }
 
 unsigned int memman_alloc_4k(struct MEMMAN *man, unsigned int size){

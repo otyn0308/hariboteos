@@ -1,4 +1,4 @@
-;haribote-os boot asm
+;asmhead.nas
 ;tab=4
 
 BOTPAK	EQU		0x00280000
@@ -90,8 +90,8 @@ skip:
 		JMP		DWORD 2*8:0x0000001b
 
 waitkbdout:
-		IN		 AL,0x64
-		AND		 AL,0x02
+		IN		AL,0x64
+		AND		AL,0x02
 		JNZ		waitkbdout
 		RET
 
