@@ -72,7 +72,7 @@ void HariMain(void){
   for(;;){
     io_cli();
     if(fifo32_status(&fifo) == 0){
-      io_sti();
+      io_stihlt();
     }else{
       i = fifo32_get(&fifo);
       io_sti();

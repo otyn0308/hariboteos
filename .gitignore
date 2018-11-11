@@ -5,10 +5,17 @@
 *.obj
 *.gas
 
-sheet.nas
 bootpack.nas
-dsctbl.nas
 graphic.nas
+dsctbl.nas
+int.nas
+fifo.nas
+keyboard.nas 
+mouse.nas
+sheet.nas
+memory.nas 
+timer.nas
+
 bootpack.bim
 bootpack.hrb
 bootpack.map
