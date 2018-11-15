@@ -8,6 +8,7 @@ void make_textbox8(struct SHEET *sht, int x0, int y0, int sx, int sy, int c);
 struct TSS32{
   int backlink, esp0, ss0, esp1, ss1, esp2, ss2, cr3;
   int eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi;
+  int es, cs, ss, ds, fs, gs;
   int ldtr, iomap;
 };
 
@@ -98,7 +99,7 @@ void HariMain(void){
   set_segmdesc(gdt + 3, 103, (int) &tss_a, AR_TSS32);
   set_segmdesc(gdt + 4, 103, (int) &tss_b, AR_TSS32);
   load_tr(3 * 8);
-  task_b_esp = memmman_alloc_4k(memman, 64 * 1024) + 64 * 1024;
+  task_b_esp = memman_alloc_4k(memman, 64 * 1024) + 64 * 1024;
   tss_b.eip = (int) &task_b_main;
   tss_b.eflags = 0x00000202;
   tss_b.eax = 0;
@@ -126,7 +127,7 @@ void HariMain(void){
       if(256 <= i && i <= 511){
         sprintf(s, "%02X", i - 256);
         putfonts8_asc_sht(sht_back, 0, 16, COL8_FFFFFF, COL8_008484, s, 2);
-        if(i < 256 + 0x54){
+        if(i < 0x54 + 256){
           if(keytable[i - 256] != 0 && cursor_x < 144){
             s[0] = keytable[i - 256];
             s[1] = 0;
@@ -175,7 +176,8 @@ void HariMain(void){
           }
         }
       }else if(i == 10){
-        putfonts8_sc_sht(sht_back, 0, 64, COL8_FFFFFF, COL8_008484, "10[sec]", 7);
+        putfonts8_asc_sht(sht_back, 0, 64, COL8_FFFFFF, COL8_008484, "10[sec]", 7);
+        taskswitch4();
       }else if(i == 3){
         putfonts8_asc_sht(sht_back, 0, 80, COL8_FFFFFF, COL8_008484, "3[sec]", 6);
       }else if(i <= 1){
@@ -250,7 +252,7 @@ void putfonts8_asc_sht(struct SHEET *sht, int x, int y, int c, int b, char *s, i
 }
 
 void make_textbox8(struct SHEET *sht, int x0, int y0, int sx, int sy, int c){
-  int x1 = x0 + sy, y1 = y0 + sy;
+  int x1 = x0 + sx, y1 = y0 + sy;
   boxfill8(sht->buf, sht->bxsize, COL8_848484, x0 - 2, y0 - 3, x1 + 1, y0 - 3);
   boxfill8(sht->buf, sht->bxsize, COL8_848484, x0 - 3, y0 - 3, x0 - 3, y1 + 1);
   boxfill8(sht->buf, sht->bxsize, COL8_FFFFFF, x0 - 3, y1 + 2, x1 + 1, y1 + 2);
