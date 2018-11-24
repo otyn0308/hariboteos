@@ -119,6 +119,7 @@ void HariMain(void){
   tss_b.ds = 1 * 8;
   tss_b.fs = 1 * 8;
   tss_b.gs = 1 * 8;
+  *((int *) 0x0fec) = (int) sht_back;
 
   for(;;){
     io_cli();
@@ -273,18 +274,23 @@ void make_textbox8(struct SHEET *sht, int x0, int y0, int sx, int sy, int c){
 void task_b_main(void){
   struct FIFO32 fifo;
   struct TIMER *timer_ts;
-  int i, fifobuf[128];
+  int i, fifobuf[128], count = 0;
+  char s[11];
+  struct SHEET *sht_back;
 
   fifo32_init(&fifo, 128, fifobuf);
   timer_ts = timer_alloc();
   timer_init(timer_ts, &fifo, 1);
-  timer_settime(timer_ts, 500);
+  timer_settime(timer_ts, 2);
+  sht_back = (struct SHEET *) *((int *) 0x0fec);
 
   for(;;){
+    count++;
+    sprintf(s, "%10d", count);
+    putfonts8_asc_sht(sht_back, 0, 144, COL8_FFFFFF, COL8_008484, s, 10);
     io_cli();
     if(fifo32_status(&fifo) == 0){
       io_sti();
-      io_hlt();
     }else{
       i = fifo32_get(&fifo);
       io_sti();
