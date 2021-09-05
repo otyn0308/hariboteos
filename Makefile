@@ -1,8 +1,8 @@
 TOOLS	= ./tools/
-INPACH 	= ./tools/haribote/
+INPATH 	= ./tools/haribote/
 
 NASK 	= $(TOOLS)nask
-CC1 	= $(TOOLS)gocc1 -I$(INCPATH) -Os -Wall -quiet
+CC1 	= $(TOOLS)gocc1 -I$(INPATH) -Os -Wall -quiet
 GAS2NASK= $(TOOLS)gas2nask -a
 OBJ2BIM = $(TOOLS)obj2bim
 MAKEFONT= $(TOOLS)makefont
